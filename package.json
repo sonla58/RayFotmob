@@ -1,7 +1,8 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "football",
-  "title": "Football",
+  "name": "fotmob",
+  "title": "Fotmob",
+  "version": "0.1.0",
   "description": "Football match schedule, result, table",
   "icon": "command-icon.png",
   "author": "iamlas",
@@ -13,7 +14,7 @@
   "commands": [
     {
       "name": "matchday",
-      "title": "Matchday",
+      "title": "Match Day",
       "description": "View matchday schedule, result",
       "mode": "view"
     },

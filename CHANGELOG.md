@@ -1,3 +1,3 @@
 # Football Changelog
 
-## [Initial Version] - 2023-08-06
+## [0.1] - 2023-10-04
