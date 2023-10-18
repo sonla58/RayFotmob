@@ -1,5 +1,5 @@
-import { Action, ActionPanel, List, Toast, showToast } from "@raycast/api";
-import { useEffect, useState } from "react";
+import { Action, ActionPanel, Icon, List, Toast, showToast } from "@raycast/api";
+import { useState } from "react";
 import { useFavorite } from "../../services/useFavorite";
 import { useSearch } from "../../services/useSearch";
 import FavoriteView from "../favorite/FavoriteView";
@@ -10,6 +10,11 @@ export default function SearchView() {
   const favoriteService = useFavorite();
 
   const searchState = useSearch(searchText);
+
+  const isFavorite = (teamId: string) => {
+    const favoritedTeams = favoriteService.teams;
+    return favoritedTeams.some((team) => team.id === teamId);
+  };
 
   return (
     <List
@@ -30,7 +35,15 @@ export default function SearchView() {
                   icon={item.iamgeUrl}
                   title={item.title}
                   subtitle={item.subtitle}
-                  accessories={item.accessories}
+                  accessories={
+                    isFavorite(item.payload.id)
+                      ? [
+                          {
+                            icon: Icon.Star,
+                          },
+                        ]
+                      : []
+                  }
                   actions={
                     <ActionPanel>
                       {/* <Action.Push title="Show Details" target={<Detail markdown={JSON.stringify(item.raw)} />} /> */}
@@ -42,8 +55,16 @@ export default function SearchView() {
                       />
                       {item.type === "team" && (
                         <Action
-                          title="Add to Favorites"
+                          title={isFavorite(item.payload.id) ? "Remove From Favorites" : "Add To Favorites"}
                           onAction={async () => {
+                            if (isFavorite(item.payload.id)) {
+                              await favoriteService.removeItems("team", item.payload.id);
+                              showToast({
+                                style: Toast.Style.Success,
+                                title: "Removed from Favorites",
+                              });
+                              return;
+                            }
                             await favoriteService.addItems({
                               type: "team",
                               value: {
