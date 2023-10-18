@@ -42,7 +42,7 @@ export default function MatchdayView() {
     return sections;
   }, [data, filterLeague]);
 
-  if (query.trim().length > 0) {
+  if (query.trim().length > 0 && (searchState.result.length > 0 || !searchState.isLoading)) {
     return (
       <List
         isLoading={isLoading}
@@ -52,66 +52,65 @@ export default function MatchdayView() {
         onSearchTextChange={setQuery}
         throttle={true}
       >
-        {searchState.result.length !== 0 &&
-          searchState.result.map((section) => {
-            return (
-              <List.Section title={section.title} key={section.title}>
-                {section.items.map((item) => (
-                  <List.Item
-                    key={item.title}
-                    icon={item.iamgeUrl}
-                    title={item.title}
-                    subtitle={item.subtitle}
-                    accessories={item.accessories}
-                    actions={
-                      <ActionPanel>
-                        {item.type === "team" ? (
-                          <>
-                            <Action
-                              title="Show Fixture"
-                              onAction={() => {
-                                launchTeamCommand(item.payload.id);
-                              }}
-                            />
-                            <Action
-                              title="Add to Favorites"
-                              onAction={async () => {
-                                await favoriteService.addItems({
-                                  type: "team",
-                                  value: {
-                                    id: item.payload.id,
-                                    leagueId: `${item.payload.leagueId}`,
-                                    name: item.title,
-                                  },
-                                });
-                                showToast({
-                                  style: Toast.Style.Success,
-                                  title: "Added to Favorites",
-                                });
-                              }}
-                            />
-                          </>
-                        ) : (
-                          <Action.OpenInBrowser
-                            title="Show Detail In Browser"
-                            url={
-                              item.type === "match"
-                                ? buildMatchDetailUrl(item.payload.id)
-                                : item.type === "player"
-                                ? buildPlayerDetailUrl(item.payload.id)
-                                : item.type === "league"
-                                ? buildLeagueDetailUrl(item.payload.id)
-                                : ""
-                            }
+        {searchState.result.map((section) => {
+          return (
+            <List.Section title={section.title} key={section.title}>
+              {section.items.map((item) => (
+                <List.Item
+                  key={item.title}
+                  icon={item.iamgeUrl}
+                  title={item.title}
+                  subtitle={item.subtitle}
+                  accessories={item.accessories}
+                  actions={
+                    <ActionPanel>
+                      {item.type === "team" ? (
+                        <>
+                          <Action
+                            title="Show Fixture"
+                            onAction={() => {
+                              launchTeamCommand(item.payload.id);
+                            }}
                           />
-                        )}
-                      </ActionPanel>
-                    }
-                  />
-                ))}
-              </List.Section>
-            );
-          })}
+                          <Action
+                            title="Add to Favorites"
+                            onAction={async () => {
+                              await favoriteService.addItems({
+                                type: "team",
+                                value: {
+                                  id: item.payload.id,
+                                  leagueId: `${item.payload.leagueId}`,
+                                  name: item.title,
+                                },
+                              });
+                              showToast({
+                                style: Toast.Style.Success,
+                                title: "Added to Favorites",
+                              });
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <Action.OpenInBrowser
+                          title="Show Detail In Browser"
+                          url={
+                            item.type === "match"
+                              ? buildMatchDetailUrl(item.payload.id)
+                              : item.type === "player"
+                              ? buildPlayerDetailUrl(item.payload.id)
+                              : item.type === "league"
+                              ? buildLeagueDetailUrl(item.payload.id)
+                              : ""
+                          }
+                        />
+                      )}
+                    </ActionPanel>
+                  }
+                />
+              ))}
+            </List.Section>
+          );
+        })}
       </List>
     );
   }
