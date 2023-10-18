@@ -117,7 +117,6 @@ export function useSearch(searchText: string) {
     },
     [searchText],
     {
-      initialData: [] as SearchResultSection[],
       abortable,
     }
   );

@@ -42,17 +42,17 @@ export default function MatchdayView() {
     return sections;
   }, [data, filterLeague]);
 
-  if (query.trim().length > 0 && (searchState.result.length > 0 || !searchState.isLoading)) {
+  if (query.trim().length > 0 && ((searchState.result ?? []).length > 0 || !searchState.isLoading)) {
     return (
       <List
-        isLoading={isLoading}
+        isLoading={isLoading || searchState.isLoading}
         searchBarPlaceholder="Search for Clubs, Leagues, and Players"
         filtering={false}
         navigationTitle="Match Day"
         onSearchTextChange={setQuery}
         throttle={true}
       >
-        {searchState.result.map((section) => {
+        {searchState.result?.map((section) => {
           return (
             <List.Section title={section.title} key={section.title}>
               {section.items.map((item) => (
@@ -117,7 +117,7 @@ export default function MatchdayView() {
 
   return (
     <List
-      isLoading={isLoading}
+      isLoading={isLoading || searchState.isLoading}
       searchBarPlaceholder="Search for Clubs, Leagues, and Players"
       filtering={false}
       navigationTitle="Match Day"

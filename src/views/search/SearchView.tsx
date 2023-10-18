@@ -1,5 +1,5 @@
 import { Action, ActionPanel, List, Toast, showToast } from "@raycast/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFavorite } from "../../services/useFavorite";
 import { useSearch } from "../../services/useSearch";
 import FavoriteView from "../favorite/FavoriteView";
@@ -11,6 +11,10 @@ export default function SearchView() {
 
   const searchState = useSearch(searchText);
 
+  useEffect(() => {
+    console.log(searchState.result?.length);
+  }, [searchState]);
+
   return (
     <List
       searchBarPlaceholder="Search for Clubs, Leagues, and Players"
@@ -18,10 +22,10 @@ export default function SearchView() {
       navigationTitle="Search"
       onSearchTextChange={setSearchText}
       throttle={true}
+      isLoading={searchState.isLoading}
     >
-      {searchText.length === 0 && <FavoriteView />}
-      {searchState.result.length !== 0 &&
-        searchState.result.map((section) => {
+      {((searchState.result ?? []).length > 0 &&
+        searchState.result?.map((section) => {
           return (
             <List.Section title={section.title} key={section.title}>
               {section.items.map((item) => (
@@ -65,7 +69,7 @@ export default function SearchView() {
               ))}
             </List.Section>
           );
-        })}
+        })) || <FavoriteView />}
     </List>
   );
 }
