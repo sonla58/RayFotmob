@@ -42,69 +42,6 @@ export default function MatchdayView() {
     return sections;
   }, [data, filterLeague]);
 
-  if (query.trim().length == 0) {
-    return (
-      <List
-        isLoading={isLoading}
-        searchBarPlaceholder="Search for Clubs, Leagues, and Players"
-        filtering={false}
-        navigationTitle="Match Day"
-        onSearchTextChange={setQuery}
-        throttle={true}
-        searchBarAccessory={
-          <LeagueDropdown
-            leagues={data?.leagues ?? []}
-            onChange={(league) => {
-              setFilterLeague(league);
-            }}
-          />
-        }
-        actions={
-          <ActionPanel>
-            <Action.PickDate
-              title="Pick Date"
-              onChange={(newDate) => {
-                if (newDate != null) {
-                  setDate(newDate);
-                }
-              }}
-            />
-          </ActionPanel>
-        }
-      >
-        {sections.map((section) => (
-          <List.Section title={section.name} key={section.id}>
-            {section.matches.map((match) => (
-              <MatchItem
-                key={match.id}
-                match={{
-                  ...match,
-                  tournament: {
-                    leagueId: section.primaryId,
-                    name: section.name,
-                  },
-                }}
-                actions={
-                  <ActionPanel>
-                    <Action.OpenInBrowser title="Show Detail In Browser" url={buildMatchDetailUrl(match.id)} />
-                    <Action.PickDate
-                      title="Pick Date"
-                      onChange={(newDate) => {
-                        if (newDate != null) {
-                          setDate(newDate);
-                        }
-                      }}
-                    />
-                  </ActionPanel>
-                }
-              />
-            ))}
-          </List.Section>
-        ))}
-      </List>
-    );
-  }
-
   if (query.trim().length > 0) {
     return (
       <List
@@ -179,5 +116,64 @@ export default function MatchdayView() {
     );
   }
 
-  return <List isLoading={true} />;
+  return (
+    <List
+      isLoading={isLoading}
+      searchBarPlaceholder="Search for Clubs, Leagues, and Players"
+      filtering={false}
+      navigationTitle="Match Day"
+      onSearchTextChange={setQuery}
+      throttle={true}
+      searchBarAccessory={
+        <LeagueDropdown
+          leagues={data?.leagues ?? []}
+          onChange={(league) => {
+            setFilterLeague(league);
+          }}
+        />
+      }
+      actions={
+        <ActionPanel>
+          <Action.PickDate
+            title="Pick Date"
+            onChange={(newDate) => {
+              if (newDate != null) {
+                setDate(newDate);
+              }
+            }}
+          />
+        </ActionPanel>
+      }
+    >
+      {sections.map((section) => (
+        <List.Section title={section.name} key={section.id}>
+          {section.matches.map((match) => (
+            <MatchItem
+              key={match.id}
+              match={{
+                ...match,
+                tournament: {
+                  leagueId: section.primaryId,
+                  name: section.name,
+                },
+              }}
+              actions={
+                <ActionPanel>
+                  <Action.OpenInBrowser title="Show Detail In Browser" url={buildMatchDetailUrl(match.id)} />
+                  <Action.PickDate
+                    title="Pick Date"
+                    onChange={(newDate) => {
+                      if (newDate != null) {
+                        setDate(newDate);
+                      }
+                    }}
+                  />
+                </ActionPanel>
+              }
+            />
+          ))}
+        </List.Section>
+      ))}
+    </List>
+  );
 }
