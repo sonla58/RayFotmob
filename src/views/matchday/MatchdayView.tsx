@@ -1,4 +1,4 @@
-import { Action, ActionPanel, List, Toast, showToast } from "@raycast/api";
+import { Action, ActionPanel, Icon, List, Toast, showToast } from "@raycast/api";
 import { useMemo, useState } from "react";
 import { useMatchDay } from "../../services/useMatchDay";
 import { MatchDayLeague } from "../../types/match-day";
@@ -67,12 +67,14 @@ export default function MatchdayView() {
                       {item.type === "team" ? (
                         <>
                           <Action
+                            icon={Icon.Calendar}
                             title="Show Fixture"
                             onAction={() => {
                               launchTeamCommand(item.payload.id);
                             }}
                           />
                           <Action
+                            icon={Icon.Star}
                             title="Add to Favorites"
                             onAction={async () => {
                               await favoriteService.addItems({
@@ -92,6 +94,7 @@ export default function MatchdayView() {
                         </>
                       ) : (
                         <Action.OpenInBrowser
+                          icon={Icon.Globe}
                           title="Show Detail In Browser"
                           url={
                             item.type === "match"

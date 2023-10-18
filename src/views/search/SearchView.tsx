@@ -48,6 +48,7 @@ export default function SearchView() {
                     <ActionPanel>
                       {/* <Action.Push title="Show Details" target={<Detail markdown={JSON.stringify(item.raw)} />} /> */}
                       <Action
+                        icon={Icon.AppWindowSidebarRight}
                         title="Show Details"
                         onAction={() => {
                           launchTeamCommand(item.payload.id);
@@ -55,6 +56,7 @@ export default function SearchView() {
                       />
                       {item.type === "team" && (
                         <Action
+                          icon={isFavorite(item.payload.id) ? Icon.StarDisabled : Icon.Star}
                           title={isFavorite(item.payload.id) ? "Remove From Favorites" : "Add To Favorites"}
                           onAction={async () => {
                             if (isFavorite(item.payload.id)) {
