@@ -1,4 +1,4 @@
-import { ActionPanel, Detail, List, Action, showToast, Toast, Icon } from "@raycast/api";
+import { ActionPanel, List, Action, showToast, Toast, Icon } from "@raycast/api";
 import { useFavorite } from "../../services/useFavorite";
 import {
   buildLeagueDetailUrl,
