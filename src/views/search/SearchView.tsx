@@ -11,10 +11,6 @@ export default function SearchView() {
 
   const searchState = useSearch(searchText);
 
-  useEffect(() => {
-    console.log(searchState.result?.length);
-  }, [searchState]);
-
   return (
     <List
       searchBarPlaceholder="Search for Clubs, Leagues, and Players"
